@@ -1,27 +1,30 @@
 import streamlit as st
 
+from ui.utils.blog_markdown import merge_display_metadata, strip_frontmatter_for_display
+
 
 def render_blog_preview(final_blog: str, metadata: dict):
     """Render blog preview with three tabs."""
     tab1, tab2, tab3 = st.tabs(["📖 Rendered Preview", "📝 Raw Markdown", "🏷️ Metadata"])
 
+    display_meta = merge_display_metadata(final_blog, metadata)
+
     with tab1:
-        _render_preview_tab(final_blog, metadata)
+        _render_preview_tab(final_blog, display_meta)
 
     with tab2:
         st.code(final_blog, language="markdown")
 
     with tab3:
-        st.json(metadata)
+        st.json(display_meta)
 
 
-def _render_preview_tab(final_blog: str, metadata: dict):
+def _render_preview_tab(final_blog: str, display_meta: dict):
     """Render the formatted blog preview."""
-    # Metadata pills
-    word_count = metadata.get("word_count", 0)
-    read_time = metadata.get("read_time", 0)
-    tags = metadata.get("tags", [])
-    style = metadata.get("style", "medium").title()
+    word_count = int(display_meta.get("word_count") or 0)
+    read_time = int(display_meta.get("read_time") or 0)
+    tags = display_meta.get("tags") or []
+    style = str(display_meta.get("style", "medium")).title()
 
     pills_html = f"""
     <div class="metadata-pills">
@@ -33,13 +36,8 @@ def _render_preview_tab(final_blog: str, metadata: dict):
     """
     st.markdown(pills_html, unsafe_allow_html=True)
 
-    # Strip YAML frontmatter for display
-    blog_display = final_blog
-    if blog_display.startswith("---"):
-        parts = blog_display.split("---", 2)
-        if len(parts) >= 3:
-            blog_display = parts[2].strip()
+    blog_display = strip_frontmatter_for_display(final_blog)
 
-    st.markdown('<div class="blog-preview-card">', unsafe_allow_html=True)
-    st.markdown(blog_display)
-    st.markdown("</div>", unsafe_allow_html=True)
+    # One Streamlit block per open/close div leaves an empty box; use native bordered container.
+    with st.container(border=True):
+        st.markdown(blog_display)
