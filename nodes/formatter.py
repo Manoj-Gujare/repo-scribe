@@ -1,6 +1,6 @@
 import os
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from models.state import RepoScribeState
 from config.settings import get_settings
 
@@ -49,7 +49,7 @@ tone: {state.get('blog_tone', 'technical')}
 word_count: {word_count}
 read_time: {read_time} min
 repo: {state.get('github_url', '')}
-generated_at: {datetime.utcnow().strftime('%Y-%m-%d')}
+generated_at: {datetime.now(timezone.utc).strftime('%Y-%m-%d')}
 ---"""
 
     # Add title and subtitle
@@ -67,7 +67,7 @@ generated_at: {datetime.utcnow().strftime('%Y-%m-%d')}
         "style": state.get("blog_style", "medium"),
         "tone": state.get("blog_tone", "technical"),
         "repo": state.get("github_url", ""),
-        "generated_at": datetime.utcnow().strftime("%Y-%m-%d"),
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
     }
 
     # Save to output directory

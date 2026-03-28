@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+
 from models.state import RepoScribeState
 from tools.tavily_tool import get_tavily_tool
 
@@ -22,10 +24,11 @@ def web_search_context(state: RepoScribeState) -> RepoScribeState:
     tech_stack = state.get("tech_stack", [])
     tech_str = " ".join(tech_stack[:3]) if tech_stack else ""
 
+    year = datetime.now().year
     queries = [
         f"{repo_name} {tech_str} tutorial",
         f"{tech_str} open source tools",
-        f"{tech_str} best practices 2024",
+        f"{tech_str} best practices {year}",
     ]
 
     results = []

@@ -21,7 +21,7 @@ def write_blog(state: RepoScribeState) -> RepoScribeState:
     key_files = state.get("key_files", {})
     web_context = state.get("web_context", "")
     blog_tone = state.get("blog_tone", "technical")
-    max_words = settings.MAX_BLOG_WORDS
+    max_words = state.get("max_words") or settings.MAX_BLOG_WORDS
 
     llm = get_llm()
     blog_sections = {}
