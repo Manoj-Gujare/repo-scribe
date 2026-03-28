@@ -34,5 +34,6 @@ class RepoScribeState(TypedDict):
 
     # Pipeline control
     tavily_enabled: bool
+    max_words: int
     current_step: str
     error: Optional[str]
