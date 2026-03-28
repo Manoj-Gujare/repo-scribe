@@ -23,8 +23,15 @@ def has_error(state: RepoScribeState) -> str:
     return END if state.get("error") else "analyze_repo"
 
 
+_compiled_pipeline = None
+
+
 def build_pipeline() -> StateGraph:
-    """Build and compile the LangGraph pipeline."""
+    """Build and compile the LangGraph pipeline (cached after first call)."""
+    global _compiled_pipeline
+    if _compiled_pipeline is not None:
+        return _compiled_pipeline
+
     workflow = StateGraph(RepoScribeState)
 
     # Add nodes
@@ -62,7 +69,8 @@ def build_pipeline() -> StateGraph:
     workflow.add_edge("write_blog", "format_output")
     workflow.add_edge("format_output", END)
 
-    return workflow.compile()
+    _compiled_pipeline = workflow.compile()
+    return _compiled_pipeline
 
 
 def run_pipeline(
@@ -70,6 +78,7 @@ def run_pipeline(
     blog_style: str = "medium",
     blog_tone: str = "technical",
     tavily_enabled: bool = True,
+    max_words: int = 1500,
 ) -> RepoScribeState:
     """Run the full pipeline and return final state."""
     from config.settings import get_settings
@@ -95,6 +104,7 @@ def run_pipeline(
         "final_blog": "",
         "metadata": {},
         "tavily_enabled": tavily_enabled and bool(settings.TAVILY_API_KEY),
+        "max_words": max_words,
         "current_step": "starting",
         "error": None,
     }

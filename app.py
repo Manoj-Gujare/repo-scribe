@@ -85,6 +85,7 @@ def main():
                 blog_style=config["blog_style"],
                 blog_tone=config["blog_tone"],
                 tavily_enabled=config["tavily_enabled"],
+                max_words=config["max_words"],
             )
             st.session_state.blog_result = result
             st.session_state.is_running = False
