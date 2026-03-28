@@ -34,7 +34,7 @@ Streamlit UI (preview + download)
 ```bash
 git clone https://github.com/your-username/repo-scribe.git
 cd repo-scribe
-pip install -r requirements.txt
+uv sync
 ```
 
 ### 2. Configure environment
