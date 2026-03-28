@@ -54,6 +54,7 @@ def generate(
                 blog_style=style,
                 blog_tone=tone,
                 tavily_enabled=tavily_enabled,
+                max_words=max_words,
             )
         except Exception as e:
             progress.stop()
@@ -68,7 +69,7 @@ def generate(
     word_count = metadata.get("word_count", 0)
     read_time = metadata.get("read_time", 0)
     repo_name = result.get("repo_name", "blog").replace("/", "-")
-    output_path = f"output/{repo_name}_blog.md"
+    output_path = f"{settings.OUTPUT_DIR}/{repo_name}_blog.md"
 
     console.print("\n[bold green]✅ Blog generated successfully[/bold green]")
     console.print(f"[blue]📝 Word count:[/blue] {word_count:,}")
