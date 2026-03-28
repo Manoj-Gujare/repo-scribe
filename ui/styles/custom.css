@@ -80,7 +80,7 @@ html, body, [class*="css"] {
     border-color: #dc3545;
 }
 
-/* Blog preview card */
+/* Blog preview card (legacy) + Streamlit bordered preview container */
 .blog-preview-card {
     background: white;
     padding: 2rem 2.5rem;
@@ -89,6 +89,17 @@ html, body, [class*="css"] {
     border: 1px solid #e9ecef;
     max-width: 800px;
     margin: 0 auto;
+}
+
+/* Rendered preview uses st.container(border=True); match card styling */
+section.main [data-testid="stVerticalBlockBorderWrapper"] {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 800px;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 /* Metadata pill badges */
