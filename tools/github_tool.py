@@ -12,9 +12,10 @@ def fetch_repo_data(github_url: str) -> dict:
     """Fetch repository data from GitHub API."""
     client = get_github_client()
 
-    # Parse owner/repo from URL
-    parts = github_url.rstrip("/").replace("https://github.com/", "").split("/")
-    if len(parts) < 2:
+    # Normalize and parse owner/repo from URL
+    normalized = github_url.strip().rstrip("/").removesuffix(".git")
+    parts = normalized.replace("https://github.com/", "").split("/")
+    if len(parts) < 2 or not parts[0] or not parts[1]:
         raise ValueError(f"Invalid GitHub URL: {github_url}")
     repo_path = f"{parts[0]}/{parts[1]}"
 
